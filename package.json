@@ -37,6 +37,7 @@
     "buffer-concat": "1.0.0",
     "mime-types": "2.1.20",
     "base64url": "3.0.0",
+    "jsftp-lsr": "1.0.0",
     "ssh2-sftp-client": "^1.1.0"
   },
   "deprecated": false,
