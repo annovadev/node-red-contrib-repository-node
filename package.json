@@ -33,6 +33,7 @@
   "dependencies": {
     "ftp": "^0.3.10",
     "jsftp": "git+https://github.com/HardingPoint/jsftp.git",
+    "json-easy-filter" "^0.0.1",
     "ssh2-sftp-client": "^1.1.0"
   },
   "deprecated": false,
