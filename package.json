@@ -1,0 +1,64 @@
+{
+  "_from": "node-red-contrib-ftp-sftp",
+  "_id": "node-red-contrib-ftp-sftp@1.8.7",
+  "_inBundle": false,
+  "_integrity": "sha512-JFO8z9LoFxfIAjhtsH3jYIn1pxUvxeei01ikGhVNYN6d0qcX0gDbsDQuxQvkQFKZtcGkpcI/CcEoohGiHhv/2A==",
+  "_location": "/node-red-contrib-ftp-sftp",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "node-red-contrib-ftp-sftp",
+    "name": "node-red-contrib-ftp-sftp",
+    "escapedName": "node-red-contrib-ftp-sftp",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-red-contrib-ftp-sftp/-/node-red-contrib-ftp-sftp-1.8.7.tgz",
+  "_shasum": "be9e61c213396eb3a19743cb1db1895533c17fe4",
+  "_spec": "node-red-contrib-ftp-sftp",
+  "_where": "C:\\Sourcen\\node-red",
+  "author": {
+    "name": "Joe Gaska [Harding Point]"
+  },
+  "bugs": {
+    "url": "https://github.com/HardingPoint/node-red-contrib-ftp-sftp/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "ftp": "^0.3.10",
+    "jsftp": "git+https://github.com/HardingPoint/jsftp.git",
+    "ssh2-sftp-client": "^1.1.0"
+  },
+  "deprecated": false,
+  "description": "A node-red node that support FTP and SFTP file transfer using $() environment variables to control the ftp connection details",
+  "homepage": "https://github.com/HardingPoint/node-red-contrib-ftp-sftp#readme",
+  "keywords": [
+    "node-red",
+    "ftp",
+    "sftp",
+    "redconnect"
+  ],
+  "license": "MIT",
+  "main": "sftp.js",
+  "name": "node-red-contrib-ftp-sftp",
+  "node-red": {
+    "nodes": {
+      "ftp": "ftp.js",
+      "sftp": "sftp.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annovadev/node-red-contrib-repository-node.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.8.7"
+}

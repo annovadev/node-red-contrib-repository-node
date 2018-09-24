@@ -1,0 +1,197 @@
+<!--
+  Copyright 2014 Atsushi Kojo.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="sftp">
+  <div class="form-row">
+    <label for="node-config-input-host"><i class="fa fa-bookmark"></i> Host</label>
+    <input type="text" id="node-config-input-host" placeholder="localhost" style="width: 40%;" />
+    <label for="node-config-input-port" style="margin-left: 10px; width: 35px; "> Port</label>
+    <input type="text" id="node-config-input-port" placeholder="21" style="width:45px">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-username"><i class="fa fa-user"></i> User</label>
+    <input type="text" id="node-config-input-username" placeholder="anonymous" />
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
+    <input type="password" id="node-config-input-password">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-hmac"><i class="fa fa-wrench"></i>hmac</label>
+    <select multiple type="text" id="node-config-input-hmac" size="9">
+        <option value="hmac-sha2-256">hmac-sha2-256</option>
+        <option value="hmac-sha2-512">hmac-sha2-512</option>
+        <option value="hmac-sha1">hmac-sha1</option>
+        <option value="hmac-md5">hmac-md5</option>
+        <option value="hmac-sha2-256-96">hmac-sha2-256-96</option>
+        <option value="hmac-sha2-512-96">hmac-sha2-512-96</option>
+        <option value="hmac-ripemd160">hmac-ripemd160</option>
+        <option value="hmac-sha1-96">hmac-sha1-96</option>
+        <option value="hmac-md5-96">hmac-md5-96</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-cipher"><i class="fa fa-wrench"></i>cipher</label>
+    <select multiple type="text" id="node-config-input-cipher" size="17">
+        <option value="aes128-ctr">aes128-ctr</option>
+        <option value="aes192-ctr">aes192-ctr</option>
+        <option value="aes256-ctr">aes256-ctr</option>
+        <option value="aes128-gcm">aes128-gcm (node v0.11.12 or newer)</option>
+        <option value="aes128-gcm@openssh.com">aes128-gcm@openssh.com (node v0.11.12 or newer)</option>
+        <option value="aes256-gcm">aes256-gcm (node v0.11.12 or newer)</option>
+        <option value="aes256-gcm@openssh.com">aes256-gcm@openssh.com (node v0.11.12 or newer)</option>
+        <option value="aes256-cbc">aes256-cbc</option>
+        <option value="aes192-cbc">aes192-cbc</option>
+        <option value="aes128-cbc">aes128-cbc</option>
+        <option value="blowfish-cbc">blowfish-cbc</option>
+        <option value="3des-cbc">3des-cbc</option>
+        <option value="arcfour256">arcfour256</option>
+        <option value="arcfour128">arcfour128</option>
+        <option value="cast128-cbc">cast128-cbc</option>
+        <option value="arcfour">arcfour</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('sftp', {
+    category: 'config',
+    color:"BurlyWood",
+    defaults: {
+      host: { value: 'localhost' },
+      port: { value: '22' },
+      username: { value: '', required: true },
+      password: { value: '', required: true },
+        hmac: { value: 'hmac-sha2-256,hmac-sha2-512,hmac-sha1', required: true },
+        cipher: { value: 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm', required: true }
+    },
+    label: function() {
+      return this.host
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="sftp in">
+  <div class="form-row">
+    <label for="node-input-sftp"><i class="fa fa-user"></i> Add new FTP Server</label>
+    <input type="text" id="node-input-sftp">
+  </div>
+  <div class="form-row">
+    <label for="node-input-operation"><i class="fa fa-wrench"></i> Operation</label>
+    <select type="text" id="node-input-operation">
+      <option value="list">list</option>
+      <option value="get">get</option>
+      <option value="put">put</option>
+      <option value="delete">delete</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-workdir"><i class="fa fa-folder-open"></i> Working Directory</label>
+    <input type="text" id="node-input-workdir" placeholder="Working Directory">
+  </div>
+  <div class="form-row input-filename-row hidden">
+    <label for="node-input-filename"><i class="fa fa-file"></i> Filename</label>
+    <input type="text" id="node-input-filename" placeholder="Filename">
+  </div>
+  <div class="form-row input-savedir-row hidden">
+    <label for="node-input-savedir"><i class="fa fa-folder-open"></i> Save Directory</label>
+    <input type="text" id="node-input-savedir" placeholder="Save Directory">
+  </div>
+  <div class="form-row input-localFilename-row hidden">
+    <label for="node-input-localFilename"><i class="fa fa-file"></i> Local Filename</label>
+    <input type="text" id="node-input-localFilename" placeholder="Local Filename">
+  </div>
+  <div class="form-row input-fileContents-row hidden">
+    <label for="node-input-fileContents"><i class="fa fa-file"></i> File Contents</label>
+    <input type="text" id="node-input-fileContents" placeholder="File Contents">
+  </div>
+  <div class="form-row input-fileExtension-row hidden">
+    <label for="node-input-fileExtension"><i class="fa fa-file"></i>File Extension</label>
+    <input type="text" id="node-input-fileExtension" placeholder="File Extension">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('sftp in', {
+    category: 'storage-input',
+    color:"BurlyWood",
+    defaults: {
+      sftp: { type: 'sftp', required: true },
+      operation: { value: 'list', required: true },
+      filename: { value: '' },
+      localFilename: { value: '' },
+        fileContents: { value: '' },
+      fileExtension: { value: '.txt' },
+      workdir: { value: '' },
+      savedir: { value: '' },
+      name: { value: '' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "file.png",
+    label: function () {
+      var sftpNode = RED.nodes.node(this.sftp);
+      return this.name || 'sftp';
+    },
+    labelStyle: function () {
+      return this.name ? 'node_label_italic' : '';
+    },
+    oneditprepare: function () {
+      var savedir = $(".input-savedir-row");
+      var filename = $(".input-filename-row");
+      var localFilename = $(".input-localFilename-row");
+        var fileContents = $(".input-fileContents-row");
+      var fileExtension = $(".input-fileExtension-row");
+      $("#node-input-operation").change(function () {
+        var id = $("#node-input-operation option:selected").val();
+        console.log(id);
+        if (id == 'list') {
+          filename.hide();
+          savedir.hide();
+          localFilename.hide();
+          fileExtension.hide();
+        } else if (id == 'put') {
+          filename.hide();
+          savedir.hide();
+          localFilename.hide();
+          fileContents.hide();
+          fileExtension.show();
+        } else if (id =='get') {
+          filename.show();
+          savedir.show();
+          localFilename.hide();
+          fileExtension.hide();
+        } else if (id =='delete') {
+            filename.show();
+            workdir.show();
+            localFilename.hide();
+            fileExtension.hide();
+            savedir.hide();
+            localFilename.hide();
+        } else {
+          filename.show();
+          savedir.hide();
+          localFilename.hide();
+          fileExtension.hide();
+        }
+      });
+    }
+  });
+</script>
