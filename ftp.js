@@ -79,7 +79,8 @@ module.exports = function (RED) {
         console.log("this.ftp " + JSON.stringify(n));
         console.log("FTP List workdir:" + this.workdir);
         console.log("FTP List absPath:" + remotePath);
-        this.ftpConfig = RED.nodes.getNode(this.repository);
+     //   this.ftpConfig = RED.nodes.getNode(this.repository);
+        this.ftpConfig = RED.nodes.getNode(this.ftp);
         var FTPHost = this.ftpConfig.options.host;
         var FTPPort = this.ftpConfig.options.port;
         if (this.ftpConfig) {
