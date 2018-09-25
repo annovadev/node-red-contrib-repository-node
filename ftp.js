@@ -79,7 +79,6 @@ module.exports = function (RED) {
         console.log("this.ftp " + JSON.stringify(n));
         console.log("FTP List workdir:" + this.workdir);
         console.log("FTP List absPath:" + remotePath);
-     //   this.ftpConfig = RED.nodes.getNode(this.repository);
         this.ftpConfig = RED.nodes.getNode(this.ftp);
         var FTPHost = this.ftpConfig.options.host;
         var FTPPort = this.ftpConfig.options.port;
@@ -268,13 +267,7 @@ console.log(msg.operation);
               
           //      console.log("FTP Find:" + msg.payload.filename);
                     var Ftp = new JSFtp(node.ftpConfig.options);
-                    var remotePath = "";
-                    if (remotePath==""){
-                        remotePath = "";    
-                    }
-                    else{
-                        remotePath    =  decode(remotePath);
-                    }
+                
                     console.log(node.workdir + remotePath)
                     console.log(query);
                     Ftp.lsr(node.workdir + remotePath , function (err, data) {
@@ -282,17 +275,17 @@ console.log(msg.operation);
         
          //           console.log('File structure', JSON.stringify(data, null, 2));
                         if (err) {
-                            console.log(err);
-                         node.error(err);  
+							console.log(err);
+							node.error(err);  
                         } 
                         else{
+							
                             node.status({});
 
                             var standardJSON = {    parent: "",  items: [] };
                             //        parent: path2id(Path.substr(0, Path.lastIndexOf("\\"))),
-                                
-                        //var query = "Kill";
-                        var searchField = "byName";
+							//var query = "Kill";
+							var searchField = "byName";
 
 
                                       if(data) {
